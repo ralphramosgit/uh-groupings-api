@@ -5,7 +5,6 @@ import java.io.IOException;
 import jakarta.mail.MessagingException;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -20,7 +19,6 @@ import org.springframework.web.context.request.WebRequest;
 
 import edu.hawaii.its.api.exception.AccessDeniedException;
 import edu.hawaii.its.api.exception.InvalidGroupPathException;
-import edu.hawaii.its.api.exception.UhIdentifierNotFoundException;
 import edu.hawaii.its.api.exception.UhIdentifierNotFoundException;
 import edu.hawaii.its.api.service.EmailService;
 import edu.hawaii.its.api.type.ApiError;
@@ -65,10 +63,6 @@ public class ErrorControllerAdvice {
                 .stackTrace(ExceptionUtils.getStackTrace(ade))
                 .resultCode("FAILURE")
                 .path(attributes.getRequest().getRequestURI()); // Get the URI of the current HTTP Request
-                .stackTrace(ExceptionUtils.getStackTrace(ade))
-                .resultCode("FAILURE")
-                .path(attributes.getRequest().getRequestURI()); // Get the URI of the current HTTP Request
-
         ApiError apiError = errorBuilder.build();
 
         return buildResponseEntity(apiError);
@@ -85,15 +79,12 @@ public class ErrorControllerAdvice {
                 .stackTrace(ExceptionUtils.getStackTrace(iae))
                 .resultCode("FAILURE")
                 .path(attributes.getRequest().getRequestURI());
-                .stackTrace(ExceptionUtils.getStackTrace(iae))
-                .resultCode("FAILURE")
-                .path(attributes.getRequest().getRequestURI());
 
         ApiError apiError = errorBuilder.build();
 
         return buildResponseEntity(apiError);
     }
-    }
+
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<ApiError> handleHttpRequestMethodNotSupportedException(
@@ -108,10 +99,6 @@ public class ErrorControllerAdvice {
                 .stackTrace(ExceptionUtils.getStackTrace(hrmnse))
                 .resultCode("FAILURE")
                 .path(attributes.getRequest().getRequestURI());
-                .stackTrace(ExceptionUtils.getStackTrace(hrmnse))
-                .resultCode("FAILURE")
-                .path(attributes.getRequest().getRequestURI());
-
         ApiError apiError = errorBuilder.build();
 
         return buildResponseEntity(apiError);
@@ -126,9 +113,6 @@ public class ErrorControllerAdvice {
         ApiError.Builder errorBuilder = new ApiError.Builder()
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .message("Runtime Exception")
-                .stackTrace(ExceptionUtils.getStackTrace(e))
-                .resultCode("FAILURE")
-                .path(attributes.getRequest().getRequestURI());
                 .stackTrace(ExceptionUtils.getStackTrace(e))
                 .resultCode("FAILURE")
                 .path(attributes.getRequest().getRequestURI());
@@ -147,9 +131,6 @@ public class ErrorControllerAdvice {
         ApiError.Builder errorBuilder = new ApiError.Builder()
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .message("Mail service exception")
-                .stackTrace(ExceptionUtils.getStackTrace(me))
-                .resultCode("FAILURE")
-                .path(attributes.getRequest().getRequestURI());
                 .stackTrace(ExceptionUtils.getStackTrace(me))
                 .resultCode("FAILURE")
                 .path(attributes.getRequest().getRequestURI());
@@ -172,9 +153,6 @@ public class ErrorControllerAdvice {
                 .stackTrace(ExceptionUtils.getStackTrace(uoe))
                 .resultCode("FAILURE")
                 .path(attributes.getRequest().getRequestURI());
-                .stackTrace(ExceptionUtils.getStackTrace(uoe))
-                .resultCode("FAILURE")
-                .path(attributes.getRequest().getRequestURI());
 
         ApiError apiError = errorBuilder.build();
 
@@ -190,9 +168,6 @@ public class ErrorControllerAdvice {
         ApiError.Builder errorBuilder = new ApiError.Builder()
                 .status(HttpStatus.NOT_FOUND)
                 .message("UH Member found failed")
-                .stackTrace(ExceptionUtils.getStackTrace(mnfe))
-                .resultCode("FAILURE")
-                .path(attributes.getRequest().getRequestURI());
                 .stackTrace(ExceptionUtils.getStackTrace(mnfe))
                 .resultCode("FAILURE")
                 .path(attributes.getRequest().getRequestURI());
@@ -212,9 +187,6 @@ public class ErrorControllerAdvice {
         ApiError.Builder errorBuilder = new ApiError.Builder()
                 .status(HttpStatus.BAD_REQUEST)
                 .message("Invalid Group Path Exception")
-                .stackTrace(ExceptionUtils.getStackTrace(igpe))
-                .resultCode("FAILURE")
-                .path(attributes.getRequest().getRequestURI());
                 .stackTrace(ExceptionUtils.getStackTrace(igpe))
                 .resultCode("FAILURE")
                 .path(attributes.getRequest().getRequestURI());

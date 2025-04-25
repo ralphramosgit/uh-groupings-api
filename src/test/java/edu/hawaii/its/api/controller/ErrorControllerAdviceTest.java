@@ -31,8 +31,6 @@ import edu.hawaii.its.api.configuration.SpringBootWebApplication;
 import edu.hawaii.its.api.exception.AccessDeniedException;
 import edu.hawaii.its.api.exception.InvalidGroupPathException;
 import edu.hawaii.its.api.exception.UhIdentifierNotFoundException;
-import edu.hawaii.its.api.exception.InvalidGroupPathException;
-import edu.hawaii.its.api.exception.UhIdentifierNotFoundException;
 import edu.hawaii.its.api.service.AsyncJobsManager;
 import edu.hawaii.its.api.service.GroupingAssignmentService;
 import edu.hawaii.its.api.service.GroupingAttributeService;
