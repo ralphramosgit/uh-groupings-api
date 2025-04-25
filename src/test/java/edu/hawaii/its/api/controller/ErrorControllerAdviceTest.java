@@ -31,6 +31,8 @@ import edu.hawaii.its.api.configuration.SpringBootWebApplication;
 import edu.hawaii.its.api.exception.AccessDeniedException;
 import edu.hawaii.its.api.exception.InvalidGroupPathException;
 import edu.hawaii.its.api.exception.UhIdentifierNotFoundException;
+import edu.hawaii.its.api.exception.InvalidGroupPathException;
+import edu.hawaii.its.api.exception.UhIdentifierNotFoundException;
 import edu.hawaii.its.api.service.AsyncJobsManager;
 import edu.hawaii.its.api.service.GroupingAssignmentService;
 import edu.hawaii.its.api.service.GroupingAttributeService;
@@ -99,6 +101,7 @@ public class ErrorControllerAdviceTest {
     /**
      * Testing for the ErrorControllerAdvice class.
      * Will generate a generic exception for each advice method and assert status code values.
+     * Will generate a generic exception for each advice method and assert status code values.
      */
     @Test
     public void testErrorController() {
@@ -141,14 +144,22 @@ public class ErrorControllerAdviceTest {
 
         // When current_user and uhIdentifier are the same, but uhIdentifier is not valid
         given(membershipService.membershipResults(uhIdentifier, uhIdentifier)).willThrow(UhIdentifierNotFoundException.class);
+        // When current_user and uhIdentifier are the same, but uhIdentifier is not valid
+        given(membershipService.membershipResults(uhIdentifier, uhIdentifier)).willThrow(UhIdentifierNotFoundException.class);
 
         MvcResult result = mockMvc.perform(get(API_BASE + "/members/{uhIdentifier}/memberships", uhIdentifier)
                         .header(CURRENT_USER, uhIdentifier))
                 .andExpect(status().isNotFound())
+                .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status").value("NOT_FOUND"))
                 .andExpect(jsonPath("$.resultCode").value("FAILURE"))
                 .andExpect(jsonPath("$.timestamp").exists())
+                .andExpect(jsonPath("$.resultCode").value("FAILURE"))
+                .andExpect(jsonPath("$.timestamp").exists())
                 .andExpect(jsonPath("$.message").value("UH Member found failed"))
+                .andExpect(jsonPath("$.path").value("/api/groupings/v2.1/members/1234/memberships"))
+                .andExpect(jsonPath("$.stackTrace").exists())
+
                 .andExpect(jsonPath("$.path").value("/api/groupings/v2.1/members/1234/memberships"))
                 .andExpect(jsonPath("$.stackTrace").exists())
 
