@@ -373,7 +373,7 @@ public class GroupingsRestControllerv2_1 {
     }
     
     /**
-     * Check if members exist in a grouping's exclude list
+     * Check if members exist in a grouping's owners list
      */
     @PostMapping(value = "/groupings/{groupingPath}/owners/members-exist")
     @ResponseBody
