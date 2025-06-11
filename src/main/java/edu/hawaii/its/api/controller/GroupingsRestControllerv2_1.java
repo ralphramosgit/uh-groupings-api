@@ -344,9 +344,9 @@ public class GroupingsRestControllerv2_1 {
     }
     
     /**
-     * Check if members exist in a grouping's include list
+     * Check if the user inputs for modifying exist in the include list of a grouping
      */
-    @PostMapping(value = "/groupings/{groupingPath}/include-members/members-exist")
+    @PostMapping(value = "/groupings/{groupingPath}/include-members/in-list")
     @ResponseBody
     public ResponseEntity<GroupingMembers> getMembersExistInInclude(
             @RequestHeader(CURRENT_USER_KEY) String currentUser,
@@ -359,9 +359,9 @@ public class GroupingsRestControllerv2_1 {
     }
     
     /**
-     * Check if members exist in a grouping's exclude list
+     * Check if the user inputs for modifying exist in the exclude list of a grouping.
      */
-    @PostMapping(value = "/groupings/{groupingPath}/exclude-members/members-exist")
+    @PostMapping(value = "/groupings/{groupingPath}/exclude-members/in-list")
     @ResponseBody
     public ResponseEntity<GroupingMembers> getMembersExistInExclude(@RequestHeader(CURRENT_USER_KEY) String currentUser,
             @PathVariable String groupingPath,
@@ -373,9 +373,9 @@ public class GroupingsRestControllerv2_1 {
     }
     
     /**
-     * Check if members exist in a grouping's owners list
+     * Check if the user inputs for modifying exist in the owners list of a grouping.
      */
-    @PostMapping(value = "/groupings/{groupingPath}/owners/members-exist")
+    @PostMapping(value = "/groupings/{groupingPath}/owners/in-list")
     @ResponseBody
     public ResponseEntity<GroupingMembers> getMembersExistInOwners(@RequestHeader(CURRENT_USER_KEY) String currentUser,
             @PathVariable String groupingPath,
