@@ -33,13 +33,6 @@ public class GroupingMembers {
         setMembers(hasMembersResults1, hasMembersResults2);
     }
     
-    //public GroupingMembers(List<HasMemberResult> filteredResults, boolean isHasMemberResult) {
-    //    this.members = new ArrayList<>();
-    //    for (HasMemberResult result : filteredResults) {
-    //        this.members.add(new GroupingMember(result));
-    //    }
-    //}
-    
     public static GroupingMembers fromFilteredResults(List<HasMemberResult> filteredResults) {
         GroupingMembers groupingMembers = new GroupingMembers();
         for (HasMemberResult result : filteredResults) {

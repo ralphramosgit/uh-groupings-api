@@ -42,7 +42,7 @@ public class HasMembersResults extends Results {
     @Override public String getResultCode() {
         return wsHasMemberResults.getResultMetadata().getResultCode();
     }
-
+    
     public String getGroupPath() {
         return getGroup().getGroupPath();
     }
