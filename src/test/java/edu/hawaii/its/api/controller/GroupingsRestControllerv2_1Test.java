@@ -6,11 +6,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.reset;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -25,14 +25,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import edu.hawaii.its.api.type.SortBy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.context.WebApplicationContext;
@@ -42,19 +41,19 @@ import edu.hawaii.its.api.groupings.GroupingAddResult;
 import edu.hawaii.its.api.groupings.GroupingAddResults;
 import edu.hawaii.its.api.groupings.GroupingDescription;
 import edu.hawaii.its.api.groupings.GroupingGroupMembers;
-import edu.hawaii.its.api.groupings.GroupingOwnerMembers;
 import edu.hawaii.its.api.groupings.GroupingGroupsMembers;
+import edu.hawaii.its.api.groupings.GroupingMembers;
 import edu.hawaii.its.api.groupings.GroupingMoveMembersResult;
 import edu.hawaii.its.api.groupings.GroupingOptAttributes;
+import edu.hawaii.its.api.groupings.GroupingOwnerMembers;
 import edu.hawaii.its.api.groupings.GroupingPaths;
 import edu.hawaii.its.api.groupings.GroupingRemoveResult;
 import edu.hawaii.its.api.groupings.GroupingRemoveResults;
 import edu.hawaii.its.api.groupings.GroupingReplaceGroupMembersResult;
 import edu.hawaii.its.api.groupings.GroupingUpdateDescriptionResult;
+import edu.hawaii.its.api.groupings.GroupingUpdateOptAttributeResult;
 import edu.hawaii.its.api.groupings.GroupingUpdateSyncDestResult;
 import edu.hawaii.its.api.groupings.GroupingUpdatedAttributeResult;
-import edu.hawaii.its.api.groupings.GroupingUpdateOptAttributeResult;
-
 import edu.hawaii.its.api.groupings.ManageSubjectResults;
 import edu.hawaii.its.api.groupings.MemberAttributeResults;
 import edu.hawaii.its.api.groupings.MembershipResults;
@@ -71,8 +70,9 @@ import edu.hawaii.its.api.service.UpdateMemberService;
 import edu.hawaii.its.api.type.Group;
 import edu.hawaii.its.api.type.Grouping;
 import edu.hawaii.its.api.type.GroupingPath;
-import edu.hawaii.its.api.type.OptType;
 import edu.hawaii.its.api.type.OptRequest;
+import edu.hawaii.its.api.type.OptType;
+import edu.hawaii.its.api.type.SortBy;
 import edu.hawaii.its.api.util.JsonUtil;
 import edu.hawaii.its.api.util.PropertyLocator;
 import edu.hawaii.its.api.wrapper.FindGroupsResults;
@@ -752,8 +752,89 @@ public class GroupingsRestControllerv2_1Test {
         verify(updateMemberService, times(1))
                 .removeOwnerships(UID, "grouping", ownersToRemove);
     }
-
-    @Test
+	
+	@Test
+	public void getMembersExistInIncludeTest() throws Exception {
+		
+		// test data
+		List<String> uhIdentifiers = new ArrayList<>();
+		uhIdentifiers.add("testiwta");
+		uhIdentifiers.add("testiwtb");
+		uhIdentifiers.add("testiwtc");
+		
+		GroupingMembers groupingMembers = new GroupingMembers();
+		
+		//Setup the service to return the mock object
+		given(groupingOwnerService.getMembersExistInInclude(UID, "grouping", uhIdentifiers))
+				.willReturn(groupingMembers);
+		
+		// perform post request to the endpoint
+		mockMvc.perform(post(API_BASE + "/groupings/grouping/include-members/in-list")
+						.header(CURRENT_USER, UID)
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(JsonUtil.asJson(uhIdentifiers)))
+				.andExpect(status().isOk());
+		
+		// Verify that the service method was called once with the correct parameters
+		verify(groupingOwnerService, times(1))
+				.getMembersExistInInclude(UID, "grouping", uhIdentifiers);
+	}
+	
+	@Test
+	public void getMembersExistInExcludeTest() throws Exception {
+		
+		// test data
+		List<String> uhIdentifiers = new ArrayList<>();
+		uhIdentifiers.add("testiwta");
+		uhIdentifiers.add("testiwtb");
+		uhIdentifiers.add("testiwtc");
+		
+		GroupingMembers groupingMembers = new GroupingMembers();
+		
+		//Setup the service to return the mock object
+		given(groupingOwnerService.getMembersExistInExclude(UID, "grouping", uhIdentifiers))
+				.willReturn(groupingMembers);
+		
+		// perform post request to the endpoint
+		mockMvc.perform(post(API_BASE + "/groupings/grouping/exclude-members/in-list")
+						.header(CURRENT_USER, UID)
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(JsonUtil.asJson(uhIdentifiers)))
+				.andExpect(status().isOk());
+		
+		// Verify that the service method was called with the correct parameters
+		verify(groupingOwnerService, times(1))
+				.getMembersExistInExclude(UID, "grouping", uhIdentifiers);
+	}
+	
+	@Test
+	public void getMembersExistInOwnersTest() throws Exception {
+		
+		// test data
+		List<String> uhIdentifiers = new ArrayList<>();
+		uhIdentifiers.add("testiwta");
+		uhIdentifiers.add("testiwtb");
+		uhIdentifiers.add("testiwtc");
+		
+		GroupingMembers groupingMembers = new GroupingMembers();
+		
+		//Setup the service to  return the mock object
+		given(groupingOwnerService.getMembersExistInOwners(UID, "grouping", uhIdentifiers))
+				.willReturn(groupingMembers);
+		
+		// perform post request to the endpoint
+		mockMvc.perform(post(API_BASE + "/groupings/grouping/owners/in-list")
+						.header(CURRENT_USER, UID)
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(JsonUtil.asJson(uhIdentifiers)))
+				.andExpect(status().isOk());
+		
+		// Verify that the service method was called with the correct parameters
+		verify(groupingOwnerService, times(1))
+				.getMembersExistInOwners(UID, "grouping", uhIdentifiers);
+	}
+	
+	@Test
     public void removeOwnerGroupingsTest() throws Exception {
         List<String> ownerGroupingsToAdd = new ArrayList<>();
         GroupingRemoveResults groupingRemoveResults = new GroupingRemoveResults();
