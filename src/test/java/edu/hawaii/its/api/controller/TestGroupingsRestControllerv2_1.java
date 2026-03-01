@@ -50,7 +50,6 @@ import edu.hawaii.its.api.groupings.GroupingUpdateSyncDestResult;
 import edu.hawaii.its.api.groupings.ManageSubjectResults;
 import edu.hawaii.its.api.groupings.MemberAttributeResults;
 import edu.hawaii.its.api.groupings.MembershipResults;
-import edu.hawaii.its.api.service.GroupingAssignmentService;
 import edu.hawaii.its.api.service.GroupingAttributeService;
 import edu.hawaii.its.api.service.GroupingsService;
 import edu.hawaii.its.api.service.MemberService;
@@ -424,8 +423,62 @@ public class TestGroupingsRestControllerv2_1 {
         assertNotNull(mvcResult);
         assertNotNull(objectMapper.readValue(mvcResult.getResponse().getContentAsString(), GroupingMembers.class));
     }
-
-    @Test
+	
+	@Test
+	public void getMembersExistInIncludeTest() throws Exception {
+		updateMemberService.addIncludeMembers(ADMIN, GROUPING, testUids);
+		String url = API_BASE_URL + "groupings/" + GROUPING + "/include-members/in-list";
+		MvcResult mvcResult = mockMvc.perform(post(url)
+						.header(CURRENT_USER, ADMIN)
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(JsonUtil.asJson(testUids)))
+				.andExpect(status().isOk())
+				.andReturn();
+		assertNotNull(mvcResult);
+		GroupingMembers groupingMembers =
+				objectMapper.readValue(mvcResult.getResponse().getContentAsString(), GroupingMembers.class);
+		assertNotNull(groupingMembers);
+		assertFalse(groupingMembers.getMembers().isEmpty());
+		updateMemberService.removeIncludeMembers(ADMIN, GROUPING, testUids);
+	}
+	
+	@Test
+	public void getMembersExistInExcludeTest() throws Exception {
+		updateMemberService.addExcludeMembers(ADMIN, GROUPING, testUids);
+		String url = API_BASE_URL + "groupings/" + GROUPING + "/exclude-members/in-list";
+		MvcResult mvcResult = mockMvc.perform(post(url)
+						.header(CURRENT_USER, ADMIN)
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(JsonUtil.asJson(testUids)))
+				.andExpect(status().isOk())
+				.andReturn();
+		assertNotNull(mvcResult);
+		GroupingMembers groupingMembers =
+				objectMapper.readValue(mvcResult.getResponse().getContentAsString(), GroupingMembers.class);
+		assertNotNull(groupingMembers);
+		assertFalse(groupingMembers.getMembers().isEmpty());
+		updateMemberService.removeExcludeMembers(ADMIN, GROUPING, testUids);
+	}
+	
+	@Test
+	public void getMembersExistInOwnersTest() throws Exception {
+		updateMemberService.addOwnerships(ADMIN, GROUPING, testUids);
+		String url = API_BASE_URL + "groupings/" + GROUPING + "/owners/in-list";
+		MvcResult mvcResult = mockMvc.perform(post(url)
+						.header(CURRENT_USER, ADMIN)
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(JsonUtil.asJson(testUids)))
+				.andExpect(status().isOk())
+				.andReturn();
+		assertNotNull(mvcResult);
+		GroupingMembers groupingMembers =
+				objectMapper.readValue(mvcResult.getResponse().getContentAsString(), GroupingMembers.class);
+		assertNotNull(groupingMembers);
+		assertFalse(groupingMembers.getMembers().isEmpty());
+		updateMemberService.removeOwnerships(ADMIN, GROUPING, testUids);
+	}
+	
+	@Test
     public void membershipResultsTest() throws Exception {
         String url = API_BASE_URL + "members/memberships";
         MvcResult mvcResult = mockMvc.perform(get(url)
