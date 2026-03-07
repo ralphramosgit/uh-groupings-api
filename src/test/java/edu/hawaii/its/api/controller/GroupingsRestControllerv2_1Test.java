@@ -756,7 +756,6 @@ public class GroupingsRestControllerv2_1Test {
 	@Test
 	public void getMembersExistInIncludeTest() throws Exception {
 		
-		// test data
 		List<String> uhIdentifiers = new ArrayList<>();
 		uhIdentifiers.add("testiwta");
 		uhIdentifiers.add("testiwtb");
@@ -764,18 +763,15 @@ public class GroupingsRestControllerv2_1Test {
 		
 		GroupingMembers groupingMembers = new GroupingMembers();
 		
-		//Setup the service to return the mock object
 		given(groupingOwnerService.getMembersExistInInclude(UID, "grouping", uhIdentifiers))
 				.willReturn(groupingMembers);
 		
-		// perform post request to the endpoint
 		mockMvc.perform(post(API_BASE + "/groupings/grouping/include-members/in-list")
 						.header(CURRENT_USER, UID)
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(JsonUtil.asJson(uhIdentifiers)))
 				.andExpect(status().isOk());
 		
-		// Verify that the service method was called once with the correct parameters
 		verify(groupingOwnerService, times(1))
 				.getMembersExistInInclude(UID, "grouping", uhIdentifiers);
 	}
@@ -791,18 +787,15 @@ public class GroupingsRestControllerv2_1Test {
 		
 		GroupingMembers groupingMembers = new GroupingMembers();
 		
-		//Setup the service to return the mock object
 		given(groupingOwnerService.getMembersExistInExclude(UID, "grouping", uhIdentifiers))
 				.willReturn(groupingMembers);
 		
-		// perform post request to the endpoint
 		mockMvc.perform(post(API_BASE + "/groupings/grouping/exclude-members/in-list")
 						.header(CURRENT_USER, UID)
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(JsonUtil.asJson(uhIdentifiers)))
 				.andExpect(status().isOk());
 		
-		// Verify that the service method was called with the correct parameters
 		verify(groupingOwnerService, times(1))
 				.getMembersExistInExclude(UID, "grouping", uhIdentifiers);
 	}
@@ -810,7 +803,6 @@ public class GroupingsRestControllerv2_1Test {
 	@Test
 	public void getMembersExistInOwnersTest() throws Exception {
 		
-		// test data
 		List<String> uhIdentifiers = new ArrayList<>();
 		uhIdentifiers.add("testiwta");
 		uhIdentifiers.add("testiwtb");
@@ -818,18 +810,15 @@ public class GroupingsRestControllerv2_1Test {
 		
 		GroupingMembers groupingMembers = new GroupingMembers();
 		
-		//Setup the service to  return the mock object
 		given(groupingOwnerService.getMembersExistInOwners(UID, "grouping", uhIdentifiers))
 				.willReturn(groupingMembers);
 		
-		// perform post request to the endpoint
 		mockMvc.perform(post(API_BASE + "/groupings/grouping/owners/in-list")
 						.header(CURRENT_USER, UID)
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(JsonUtil.asJson(uhIdentifiers)))
 				.andExpect(status().isOk());
 		
-		// Verify that the service method was called with the correct parameters
 		verify(groupingOwnerService, times(1))
 				.getMembersExistInOwners(UID, "grouping", uhIdentifiers);
 	}
